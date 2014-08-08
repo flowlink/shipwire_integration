@@ -11,6 +11,10 @@ class ShipWire
     @payload = payload
     @config = config
 
+    if @config['shipwire_beta']
+      self.class.base_uri 'https://api.beta.shipwire.com/exec/'
+    end
+
     authenticate!
   end
 
