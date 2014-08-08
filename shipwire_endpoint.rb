@@ -1,8 +1,7 @@
 require "sinatra"
 require "endpoint_base"
 
-require File.expand_path(File.dirname(__FILE__) + '/lib/ship_wire.rb')
-Dir['./lib/**/*.rb'].each { |f| require f }
+require File.expand_path(File.dirname(__FILE__) + '/lib/shipwire_integration.rb')
 
 class ShipwireEndpoint < EndpointBase::Sinatra::Base
   set :logging, true
