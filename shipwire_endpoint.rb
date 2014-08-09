@@ -7,6 +7,8 @@ Dir['./lib/**/*.rb'].each { |f| require f }
 class ShipwireEndpoint < EndpointBase::Sinatra::Base
   set :logging, true
 
+  set :show_exceptions, :after_handler
+
   post '/add_shipment' do
     begin
   	  shipment_entry = ShipmentEntry.new(@payload, @config)
@@ -14,6 +16,7 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
 
       result 200, 'Successfully sent shipment to Shipwire'
     rescue => e
+      log_exception(e)
       result 500, e.message
     end
   end
@@ -32,6 +35,7 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
 
       result 200
     rescue => e
+      log_exception(e)
       result 500, e.message
     end
   end
