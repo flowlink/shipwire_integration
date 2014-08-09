@@ -12,7 +12,7 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
   	  shipment_entry = ShipmentEntry.new(@payload, @config)
   	  response  = shipment_entry.consume
 
-      result 200, 'Successfully sent shipment to Shipwire'
+      result 200, "Shipwire Shipment #{response["shipwire_response"]['TransactionId']} successfully created"
     rescue => e
       result 500, e.message
     end
