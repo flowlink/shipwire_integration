@@ -19,7 +19,7 @@ class ShipmentTracking < ShipWire
         msgs << create_message(shipment)
       end
 
-      return { 'messages' => msgs, 'shipwire_response' => response['TrackingUpdateResponse'] }
+      return { 'messages' => msgs, 'shipwire_response' => response['TrackingUpdateResponse'] }.with_indifferent_access
     end
   end
 
