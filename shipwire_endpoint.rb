@@ -15,6 +15,7 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
       summary = "Shipwire Shipment #{response["shipwire_response"]['TransactionId']} successfully created. "
 
       if (warnings = response["shipwire_response"]["OrderInformation"]["Order"]["WarningList"]["Warning"] rescue false)
+        warnings = [ warnings ] if !warnings.is_a?(Array)
         summary << "Warnings: #{warnings.map(&:strip).join("\n")}"
       end
 
