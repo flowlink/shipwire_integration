@@ -12,7 +12,13 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
   	  shipment_entry = ShipmentEntry.new(@payload, @config)
   	  response  = shipment_entry.consume
 
-      result 200, "Shipwire Shipment #{response["shipwire_response"]['TransactionId']} successfully created"
+      summary = "Shipwire Shipment #{response["shipwire_response"]['TransactionId']} successfully created. "
+
+      if (warnings = response["shipwire_response"]["OrderInformation"]["Order"]["WarningList"]["Warning"] rescue false)
+        summary << "Warnings: #{warnings.map(&:strip).join("\n")}"
+      end
+
+      result 200, summary
     rescue => e
       result 500, e.message
     end
