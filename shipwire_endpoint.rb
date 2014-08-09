@@ -26,6 +26,8 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
       if messages = response[:messages]
         messages.each { |m| add_object :shipment, m }
         set_summary "Successfully received #{messages.count} shipment(s) from Shipwire"
+      else
+        set_summary "No new Shipwire shipments"
       end
 
       result 200
