@@ -13,13 +13,15 @@ class ShipmentTracking < ShipWire
       raise SendError, response['TrackingUpdateResponse']['ErrorMessage']
     else
       msgs = []
+      shipments = response['TrackingUpdateResponse']['Order']
+      shipments = [ shipments ] if !shipments.is_a?(Array)
 
-      response['TrackingUpdateResponse']['Order'].each do |shipment|
+      shipments.each do |shipment|
         next unless shipment['shipped'] == 'YES'
         msgs << create_message(shipment)
       end
 
-      return { 'messages' => msgs, 'shipwire_response' => response['TrackingUpdateResponse'] }
+      return { 'messages' => msgs, 'shipwire_response' => response['TrackingUpdateResponse'] }.with_indifferent_access
     end
   end
 

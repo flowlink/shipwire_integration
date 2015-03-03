@@ -13,6 +13,8 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
 
   set :logging, true
 
+  set :show_exceptions, :after_handler
+
   post '/add_shipment' do
     begin
       shipment_entry = ShipmentEntry.new(@payload, @config)
@@ -27,6 +29,7 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
 
       result 200, summary
     rescue => e
+      log_exception(e)
       result 500, e.message
     end
   end
@@ -39,10 +42,13 @@ class ShipwireEndpoint < EndpointBase::Sinatra::Base
       if messages = response[:messages]
         messages.each { |m| add_object :shipment, m }
         set_summary "Successfully received #{messages.count} shipment(s) from Shipwire"
+      else
+        set_summary "No new Shipwire shipments"
       end
 
       result 200
     rescue => e
+      log_exception(e)
       result 500, e.message
     end
   end
